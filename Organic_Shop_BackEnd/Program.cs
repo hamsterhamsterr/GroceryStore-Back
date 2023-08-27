@@ -3,6 +3,7 @@ using Serilog.Events;
 using Serilog;
 using Organic_Shop_BackEnd.Database;
 using Microsoft.EntityFrameworkCore;
+using Organic_Shop_BackEnd.DTO;
 
 namespace Organic_Shop_BackEnd
 {
@@ -30,6 +31,8 @@ namespace Organic_Shop_BackEnd
                 o.AddPolicy("AllowAll", builder => 
                 { builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); });
             });
+
+            builder.Services.AddAutoMapper(typeof(MapperInitializer));
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
