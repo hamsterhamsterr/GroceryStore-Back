@@ -27,5 +27,19 @@ namespace Organic_Shop_BackEnd.Controllers
             var result = _mapper.Map<List<GetCategoryDTO>>(categories);
             return Ok(result);
         }
+
+        [HttpGet("{id:int}", Name = "GetCategory")]
+        public IActionResult GetCategory(int id)
+        {
+            var category = _context.Categories
+                .Where(c => c.Id == id)
+                .FirstOrDefault();
+
+            if (category is null)
+                return NotFound();
+
+            var result = _mapper.Map<GetCategoryDTO>(category);
+            return Ok(result);
+        }
     }
 }

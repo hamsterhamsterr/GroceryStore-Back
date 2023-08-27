@@ -50,9 +50,10 @@ namespace Organic_Shop_BackEnd.Controllers
         {
             var product = _mapper.Map<Product>(productDTO);
 
-            _context.Products.Add(product);
+            var createdProduct = _context.Products.Add(product).Entity;
             _context.SaveChanges();
-            return Ok();
+
+            return Ok(createdProduct.Id);
         }
 
         [HttpPut()]
