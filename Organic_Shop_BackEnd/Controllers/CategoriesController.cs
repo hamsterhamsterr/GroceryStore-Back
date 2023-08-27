@@ -17,9 +17,9 @@ namespace Organic_Shop_BackEnd.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Category> Get()
+        public IActionResult GetCategories()
         {
-            return _context.Categories.ToList();
+            return Ok(_context.Categories.ToList());
         }
     }
 }
