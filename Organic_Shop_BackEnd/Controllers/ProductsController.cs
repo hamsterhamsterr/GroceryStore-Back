@@ -66,7 +66,7 @@ namespace Organic_Shop_BackEnd.Controllers
             return Ok();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id:int}")]
         public IActionResult DeleteProduct(int id)
         {
             var product = _context.Products

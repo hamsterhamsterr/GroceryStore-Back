@@ -6,7 +6,7 @@ namespace Organic_Shop_BackEnd.Model
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public int Price { get; set; }
+        public double Price { get; set; }
         public string ImageUrl { get; set; }
 
         [ForeignKey(nameof(Category))]

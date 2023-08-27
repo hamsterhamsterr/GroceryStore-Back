@@ -8,7 +8,7 @@ namespace Organic_Shop_BackEnd.DTO
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public int Price { get; set; }
+        public double Price { get; set; }
         public string ImageUrl { get; set; }
         public int CategoryId { get; set; }
         public GetCategoryDTO Category { get; set; }
@@ -19,7 +19,7 @@ namespace Organic_Shop_BackEnd.DTO
         [Required]
         public string Title { get; set; }
         [Required]
-        public int Price { get; set; }
+        public double Price { get; set; }
         [Required]
         public string ImageUrl { get; set; }
         [Required]
