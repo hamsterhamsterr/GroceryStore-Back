@@ -10,6 +10,8 @@ namespace Organic_Shop_BackEnd.DTO
             CreateMap<Category, GetCategoryDTO>().ReverseMap();
             CreateMap<Product, GetProductDTO>().ReverseMap();
             CreateMap<Product, CreateProductDTO>().ReverseMap();
+            CreateMap<Product, UpdateProductDTO>().ReverseMap();
+
         }
     }
 }

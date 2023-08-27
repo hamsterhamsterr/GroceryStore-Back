@@ -25,4 +25,18 @@ namespace Organic_Shop_BackEnd.DTO
         [Required]
         public int CategoryId { get; set; }
     }
+
+    public class UpdateProductDTO 
+    {
+        [Required]
+        public int Id { get; set; }
+        [Required]
+        public string Title { get; set; }
+        [Required]
+        public int Price { get; set; }
+        [Required]
+        public string ImageUrl { get; set; }
+        [Required]
+        public int CategoryId { get; set; }
+    }
 }

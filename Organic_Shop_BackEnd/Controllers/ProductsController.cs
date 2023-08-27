@@ -45,11 +45,38 @@ namespace Organic_Shop_BackEnd.Controllers
             return Ok(result);
         }
 
-        //[HttpPost]
-        //public IActionResult CreateProduct([FromBody] Product product)
-        //{
-        //    _context.Products.Add(product);
-        //    return Ok();
-        //}
+        [HttpPost]
+        public IActionResult CreateProduct([FromBody] CreateProductDTO productDTO)
+        {
+            var product = _mapper.Map<Product>(productDTO);
+
+            _context.Products.Add(product);
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPut()]
+        public IActionResult UpdateProduct([FromBody] UpdateProductDTO productDTO)
+        {
+            var product = _mapper.Map<Product>(productDTO);
+
+            _context.Products.Update(product);
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteProduct(int id)
+        {
+            var product = _context.Products
+                                .Where(p => p.Id == id)
+                                .FirstOrDefault();
+
+            if (product is null) return NotFound();
+
+            _context.Products.Remove(product);
+            _context.SaveChanges();
+            return Ok();
+        }
     }
 }
