@@ -26,6 +26,9 @@ namespace Organic_Shop_BackEnd
 
             builder.Services.AddControllers();
 
+            builder.Services.AddAuthentication();
+            builder.Services.ConfigureIdentity();
+
             builder.Services.AddCors(o => 
             {
                 o.AddPolicy("AllowAll", builder => 
