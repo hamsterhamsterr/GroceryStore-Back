@@ -4,6 +4,7 @@ using Serilog;
 using Organic_Shop_BackEnd.Database;
 using Microsoft.EntityFrameworkCore;
 using Organic_Shop_BackEnd.DTO;
+using Organic_Shop_BackEnd.Auth;
 
 namespace Organic_Shop_BackEnd
 {
@@ -28,6 +29,7 @@ namespace Organic_Shop_BackEnd
 
             builder.Services.AddAuthentication();
             builder.Services.ConfigureIdentity();
+            builder.Services.ConfigureJWT(builder.Configuration);
 
             builder.Services.AddCors(o => 
             {
@@ -36,6 +38,7 @@ namespace Organic_Shop_BackEnd
             });
 
             builder.Services.AddAutoMapper(typeof(MapperInitializer));
+            builder.Services.AddScoped<IAuthManager, AuthManager>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -55,6 +58,7 @@ namespace Organic_Shop_BackEnd
 
             app.UseCors("AllowAll");
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

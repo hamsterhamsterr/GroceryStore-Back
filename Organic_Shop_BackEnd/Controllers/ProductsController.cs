@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
 using Organic_Shop_BackEnd.Database;
 using Organic_Shop_BackEnd.DTO;
 using Organic_Shop_BackEnd.Model;
@@ -14,19 +16,30 @@ namespace Organic_Shop_BackEnd.Controllers
     {
         private readonly IMapper _mapper;
         private DatabaseContext _context;
+        private ILogger _logger;
 
-        public ProductsController(DatabaseContext context, IMapper mapper)
+        public ProductsController(DatabaseContext context, IMapper mapper, ILogger<ProductsController> logger)
         {
             _context = context;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]
         public IActionResult GetProducts()
         {
-            var products = _context.Products.Include(p => p.Category).ToList();
-            var result = _mapper.Map<List<GetProductDTO>>(products);
-            return Ok(result);
+            try
+            {
+                var products = _context.Products.Include(p => p.Category).ToList();
+                var result = _mapper.Map<List<GetProductDTO>>(products);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError(ex, $"Something Went Wront in the {nameof(GetProducts)}");
+                return StatusCode(500, "Internal Server Error. Please Try Again Later.");
+            }
         }
 
         [HttpGet("{id:int}", Name = "GetProduct")]
@@ -45,6 +58,7 @@ namespace Organic_Shop_BackEnd.Controllers
             return Ok(result);
         }
 
+        //[Authorize(Roles = "Administrator")]
         [HttpPost]
         public IActionResult CreateProduct([FromBody] CreateProductDTO productDTO)
         {
@@ -56,6 +70,7 @@ namespace Organic_Shop_BackEnd.Controllers
             return Ok(createdProduct.Id);
         }
 
+        //[Authorize(Roles = "Administrator")]
         [HttpPut()]
         public IActionResult UpdateProduct([FromBody] UpdateProductDTO productDTO)
         {
@@ -66,6 +81,7 @@ namespace Organic_Shop_BackEnd.Controllers
             return Ok();
         }
 
+        //[Authorize(Roles = "Administrator")]
         [HttpDelete("{id:int}")]
         public IActionResult DeleteProduct(int id)
         {

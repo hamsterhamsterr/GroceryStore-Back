@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Organic_Shop_BackEnd.Auth;
 using Organic_Shop_BackEnd.DTO;
 using Organic_Shop_BackEnd.Model;
 
@@ -14,14 +15,17 @@ namespace Organic_Shop_BackEnd.Controllers
         private readonly UserManager<ApiUser> _userManager;
         private readonly ILogger<AccountController> _logger;
         private readonly IMapper _mapper;
+        private readonly IAuthManager _authManager;
 
         public AccountController(UserManager<ApiUser> userManager, 
             ILogger<AccountController> logger, 
-            IMapper mapper)
+            IMapper mapper,
+            IAuthManager authManager)
         {
             _userManager = userManager;
             _logger = logger;
             _mapper = mapper;
+            _authManager = authManager;
         }
 
         [HttpPost]
@@ -43,7 +47,7 @@ namespace Organic_Shop_BackEnd.Controllers
                     return StatusCode(500, "User Registration Attempt Failed");
 
                 await _userManager.AddToRolesAsync(user, new List<string> { "User" });
-                return Accepted();
+                return Accepted(new { Token = await _authManager.CreateToken(userDTO.Email) });
             }
             catch (Exception ex)
             {
@@ -52,29 +56,29 @@ namespace Organic_Shop_BackEnd.Controllers
             }
         }
 
-        //[HttpPost]
-        //[Route("login")]
-        //public async Task<IActionResult> Login([FromBody] LoginUserDTO userDTO)
-        //{
-        //    _logger.LogInformation($"Login Attempt for {userDTO.Email}");
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> Login([FromBody] LoginUserDTO userDTO)
+        {
+            _logger.LogInformation($"Login Attempt for {userDTO.Email}");
 
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-        //    try
-        //    {
-        //        var result = await _signInManager.PasswordSignInAsync(userDTO.Email, userDTO.Password, false, false);
+            try
+            {
+                if (!await _authManager.ValidateUser(userDTO.Email, userDTO.Password))
+                {
+                    return Unauthorized();
+                }
 
-        //        if (!result.Succeeded)
-        //            return Unauthorized(userDTO);
-
-        //        return Accepted();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, $"Something Went Wront in the {nameof(Login)}");
-        //        return StatusCode(500, "Internal Server Error. Please Try Again Later.");
-        //    }
-        //}
+                return Accepted(new { Token = await _authManager.CreateToken(userDTO.Email) });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something Went Wront in the {nameof(Login)}");
+                return StatusCode(500, "Internal Server Error. Please Try Again Later.");
+            }
+        }
     }
 }
