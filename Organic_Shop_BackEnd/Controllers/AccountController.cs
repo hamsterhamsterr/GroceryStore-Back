@@ -42,6 +42,7 @@ namespace Organic_Shop_BackEnd.Controllers
                 if (!result.Succeeded)
                     return StatusCode(500, "User Registration Attempt Failed");
 
+                await _userManager.AddToRolesAsync(user, new List<string> { "User" });
                 return Accepted();
             }
             catch (Exception ex)
