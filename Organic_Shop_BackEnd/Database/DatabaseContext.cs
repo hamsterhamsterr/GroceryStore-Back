@@ -9,6 +9,12 @@ namespace Organic_Shop_BackEnd.Database
     {
         protected readonly IConfiguration configuration;
 
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+        public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
+
+
         public DatabaseContext(IConfiguration configuration)
         {
             this.configuration = configuration;
@@ -36,7 +42,6 @@ namespace Organic_Shop_BackEnd.Database
             optionsBuilder.UseNpgsql(configuration.GetConnectionString("WebApiDatabase"));
         }
 
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Product> Products { get; set; }
+        
     }
 }
