@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Organic_Shop_BackEnd.DTO;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Organic_Shop_BackEnd.Model
 {
