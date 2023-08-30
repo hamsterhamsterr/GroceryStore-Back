@@ -5,6 +5,7 @@ using Organic_Shop_BackEnd.Database;
 using Microsoft.EntityFrameworkCore;
 using Organic_Shop_BackEnd.DTO;
 using Organic_Shop_BackEnd.Auth;
+using System.Text.Json.Serialization;
 
 namespace Organic_Shop_BackEnd
 {
@@ -25,7 +26,9 @@ namespace Organic_Shop_BackEnd
 
             builder.Services.AddDbContext<DatabaseContext>();
 
-            builder.Services.AddControllers();
+            builder.Services
+                .AddControllers()
+                .AddJsonOptions(opt => opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
             builder.Services.AddAuthentication();
             builder.Services.ConfigureIdentity();

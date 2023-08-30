@@ -50,13 +50,13 @@ namespace Organic_Shop_BackEnd.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6ae9aa1e-5c0c-4889-967e-9cab8fb2689c",
+                            Id = "0204e322-40c5-4852-a3e7-7d54adf1ca9a",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "353e7de3-e150-4da9-b758-37ee74dcbc4c",
+                            Id = "4ace9a0e-f901-4a19-933c-e9f4c0ae8f2f",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -418,7 +418,7 @@ namespace Organic_Shop_BackEnd.Migrations
                         .IsRequired();
 
                     b.HasOne("Organic_Shop_BackEnd.Model.ShoppingCart", "ShoppingCart")
-                        .WithMany()
+                        .WithMany("ShoppingCartItems")
                         .HasForeignKey("ShoppingCartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -426,6 +426,11 @@ namespace Organic_Shop_BackEnd.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("ShoppingCart");
+                });
+
+            modelBuilder.Entity("Organic_Shop_BackEnd.Model.ShoppingCart", b =>
+                {
+                    b.Navigation("ShoppingCartItems");
                 });
 #pragma warning restore 612, 618
         }

@@ -10,5 +10,7 @@ namespace Organic_Shop_BackEnd.Model
         [ForeignKey(nameof(User))]
         public string UserId { get; set; }
         public ApiUser User { get; set; }
+
+        public IList<ShoppingCartItem> ShoppingCartItems { get; set; }
     }
 }
