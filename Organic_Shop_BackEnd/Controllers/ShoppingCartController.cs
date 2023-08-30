@@ -7,6 +7,7 @@ using Organic_Shop_BackEnd.Database;
 using Organic_Shop_BackEnd.DTO;
 using Organic_Shop_BackEnd.Model;
 using System.IdentityModel.Tokens.Jwt;
+using System;
 
 namespace Organic_Shop_BackEnd.Controllers
 {
@@ -29,9 +30,7 @@ namespace Organic_Shop_BackEnd.Controllers
         [HttpGet]
         public IActionResult GetCart([FromHeader(Name = "Authentication")] string token)
         {
-            var handler = new JwtSecurityTokenHandler();
-            var jwtSecurityToken = handler.ReadJwtToken(token);
-            var userName = jwtSecurityToken.Claims.First(claim => claim.Type == "name").Value;
+            var userName = GetValueFromToken(token, propertyName: "name");
 
             var cart = _context.ShoppingCarts
                 .Include(sc => sc.User)
@@ -43,6 +42,55 @@ namespace Organic_Shop_BackEnd.Controllers
             if (cart is null) return NotFound();
 
             return Ok(_mapper.Map<ShoppingCartDTO>(cart));
+        }
+
+        //[Authorize]
+        [HttpPost]
+        public IActionResult AddToCart([FromHeader(Name = "Authentication")] string token,
+                                       [FromBody] int productId)
+        {
+            var userId = GetValueFromToken(token, propertyName: "userId");
+            var cart = _context.ShoppingCarts.Include(sc => sc.User).Where(sc => sc.User.Id == userId).FirstOrDefault();
+
+            if (cart is null) cart = CreateCartInDb(userId);
+            
+            var product = _context.ShoppingCartItems
+                .Where(sci => sci.ProductId == productId && sci.ShoppingCartId == cart.Id)
+                .FirstOrDefault();
+
+            if (product is null)
+                cart.ShoppingCartItems.Add(new ShoppingCartItem()
+                {
+                    ProductId = productId,
+                    Quantity = 1,
+                    ShoppingCartId = cart.Id
+                });
+            else product.Quantity += 1;
+
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        private string GetValueFromToken(string token, string propertyName)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jwtSecurityToken = handler.ReadJwtToken(token);
+            var tokenValue = jwtSecurityToken.Claims.First(claim => claim.Type == propertyName).Value;
+            return tokenValue;
+        }
+
+        private ShoppingCart CreateCartInDb(string userId)
+        {
+            var shoppingCart = new ShoppingCart
+            {
+                DateCreated = DateTimeOffset.Now.ToUnixTimeSeconds(),
+                UserId = userId,
+                ShoppingCartItems = new List<ShoppingCartItem>(),
+            };
+
+            var entityShoppingCart = _context.ShoppingCarts.Add(shoppingCart);
+            _context.SaveChanges();
+            return entityShoppingCart.Entity;
         }
     }
 }

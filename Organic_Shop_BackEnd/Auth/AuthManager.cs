@@ -60,7 +60,8 @@ namespace Organic_Shop_BackEnd.Auth
         {
             var claims = new List<Claim>
             {
-                new Claim("name", _user.UserName)
+                new Claim("name", _user.UserName),
+                new Claim("userId", _user.Id)
             };
 
             var roles = await _userManager.GetRolesAsync(_user);
