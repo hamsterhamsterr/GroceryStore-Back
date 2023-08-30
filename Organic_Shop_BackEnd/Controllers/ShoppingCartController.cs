@@ -44,13 +44,19 @@ namespace Organic_Shop_BackEnd.Controllers
             return Ok(_mapper.Map<ShoppingCartDTO>(cart));
         }
 
+        
+
         //[Authorize]
-        [HttpPost]
+        [HttpPost("AddProduct")]
         public IActionResult AddToCart([FromHeader(Name = "Authentication")] string token,
                                        [FromBody] int productId)
         {
             var userId = GetValueFromToken(token, propertyName: "userId");
-            var cart = _context.ShoppingCarts.Include(sc => sc.User).Where(sc => sc.User.Id == userId).FirstOrDefault();
+            var cart = _context.ShoppingCarts
+                .Include(sc => sc.User)
+                .Include(sc => sc.ShoppingCartItems)
+                .Where(sc => sc.User.Id == userId)
+                .FirstOrDefault();
 
             if (cart is null) cart = CreateCartInDb(userId);
             
@@ -70,6 +76,49 @@ namespace Organic_Shop_BackEnd.Controllers
             _context.SaveChanges();
             return Ok();
         }
+
+        //[Authorize]
+        [HttpDelete("{productId:int}", Name = "RemoveProduct")]
+        public IActionResult RemoveFromCart([FromHeader(Name = "Authentication")] string token, int productId)
+        {
+            var userId = GetValueFromToken(token, propertyName: "userId");
+            var cart = _context.ShoppingCarts.Include(sc => sc.User).Where(sc => sc.User.Id == userId).FirstOrDefault();
+
+            if (cart is null) return BadRequest("Shopping cart is empty");
+
+            var product = _context.ShoppingCartItems
+                .Where(sci => sci.ProductId == productId && sci.ShoppingCartId == cart.Id)
+                .FirstOrDefault();
+
+            if (product is null) return BadRequest("Product doesn't exist in shopping cart");
+
+            product.Quantity -= 1;
+
+            if (product.Quantity == 0)
+                _context.ShoppingCartItems.Remove(product);
+
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        //[Authorize]
+        [HttpDelete("ClearCart")]
+        public IActionResult ClearCart([FromHeader(Name = "Authentication")] string token)
+        {
+            var userId = GetValueFromToken(token, "userId");
+            var cart = _context.ShoppingCarts
+                .Include(sc => sc.User)
+                .Include(sc => sc.ShoppingCartItems)
+                .Where(sc => sc.User.Id == userId)
+                .FirstOrDefault();
+
+            if (cart is null) return BadRequest("Shopping cart already is empty");
+
+            cart.ShoppingCartItems.Clear();
+            _context.SaveChanges();
+            return Ok();
+        }
+
 
         private string GetValueFromToken(string token, string propertyName)
         {
