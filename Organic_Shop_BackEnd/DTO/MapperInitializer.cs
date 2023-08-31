@@ -13,6 +13,7 @@ namespace Organic_Shop_BackEnd.DTO
             CreateMap<Product, UpdateProductDTO>().ReverseMap();
             CreateMap<ApiUser, RegisterUserDTO>().ReverseMap();
             CreateMap<ApiUser, LoginUserDTO>().ReverseMap();
+            CreateMap<ApiUser, GetUserDTO>().ReverseMap();
             CreateMap<ShoppingCart, ShoppingCartDTO>().ReverseMap();
             CreateMap<ShoppingCartItem, ShoppingCartItemDTO>().ReverseMap();
             CreateMap<Order, CreateOrderDTO>().ReverseMap();

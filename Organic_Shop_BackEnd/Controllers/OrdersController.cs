@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Organic_Shop_BackEnd.Database;
 using Organic_Shop_BackEnd.DTO;
 using Organic_Shop_BackEnd.Model;
@@ -24,11 +25,27 @@ namespace Organic_Shop_BackEnd.Controllers
             _logger = logger;
         }
 
+        ////[Authorize(Roles = "Admin")]
+        //[HttpGet]
+        //public IActionResult GetOrders()
+        //{
+        //    Ok();
+        //}
+
         //[Authorize(Roles = "Admin")]
         [HttpGet]
-        public IActionResult GetOrders()
+        public IActionResult GetAllOrders()
         {
-            return Ok();
+            var orders = _context.Orders
+                .Include(o => o.User)
+                .Include(o => o.OrderItems).ThenInclude(oi => oi.Product).ThenInclude(p => p.Category)
+                .ToList();
+
+            var ordersDTO = new List<GetOrderDTO>();
+            foreach (var order in orders)
+                ordersDTO.Add(_mapper.Map<GetOrderDTO>(order));
+
+            return Ok(ordersDTO);
         }
 
         //[Authorize]
