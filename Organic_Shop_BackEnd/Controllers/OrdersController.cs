@@ -25,20 +25,31 @@ namespace Organic_Shop_BackEnd.Controllers
             _logger = logger;
         }
 
-        ////[Authorize(Roles = "Admin")]
-        //[HttpGet]
-        //public IActionResult GetOrders()
-        //{
-        //    Ok();
-        //}
-
         //[Authorize(Roles = "Admin")]
-        [HttpGet]
+        [HttpGet("GetAllOrders")]
         public IActionResult GetAllOrders()
         {
             var orders = _context.Orders
                 .Include(o => o.User)
                 .Include(o => o.OrderItems).ThenInclude(oi => oi.Product).ThenInclude(p => p.Category)
+                .ToList();
+
+            var ordersDTO = new List<GetOrderDTO>();
+            foreach (var order in orders)
+                ordersDTO.Add(_mapper.Map<GetOrderDTO>(order));
+
+            return Ok(ordersDTO);
+        }
+
+        //[Authorize()]
+        [HttpGet("GetOrdersByUser")]
+        public IActionResult GetOrdersByUser([FromHeader(Name = "Authentication")] string token)
+        {
+            var userId = GetValueFromToken(token, propertyName: "userId");
+            var orders = _context.Orders
+                .Include(o => o.User)
+                .Include(o => o.OrderItems).ThenInclude(oi => oi.Product).ThenInclude(p => p.Category)
+                .Where(o => o.UserId == userId)
                 .ToList();
 
             var ordersDTO = new List<GetOrderDTO>();
@@ -59,9 +70,10 @@ namespace Organic_Shop_BackEnd.Controllers
             order.UserId = userId;
             order.datePlaced = DateTimeOffset.Now.ToUnixTimeSeconds();
 
-            _context.Add(order);
+            var orderEntity = _context.Add(order);
             _context.SaveChanges();
-            return Ok();
+            // Creates id after save changes.
+            return Ok(orderEntity.Entity.Id);
         }
 
         private string GetValueFromToken(string token, string propertyName)
