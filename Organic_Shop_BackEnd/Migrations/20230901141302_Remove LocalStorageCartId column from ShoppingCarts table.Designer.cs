@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Organic_Shop_BackEnd.Database;
@@ -11,9 +12,11 @@ using Organic_Shop_BackEnd.Database;
 namespace Organic_Shop_BackEnd.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230901141302_Remove LocalStorageCartId column from ShoppingCarts table")]
+    partial class RemoveLocalStorageCartIdcolumnfromShoppingCartstable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,13 +53,13 @@ namespace Organic_Shop_BackEnd.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "825c9425-19fc-4b0c-b78f-8f7831ae6ac3",
+                            Id = "c2551531-8d5a-4c62-b59c-67d5ed853500",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "cf36b3a2-672e-461e-9913-0dc44e59bba2",
+                            Id = "c0b87851-7d05-4775-829d-e54e9498ee67",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -166,52 +169,6 @@ namespace Organic_Shop_BackEnd.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("Organic_Shop_BackEnd.Model.AnonShoppingCart", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<long>("DateCreated")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("LocalCartId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AnonShoppingCarts");
-                });
-
-            modelBuilder.Entity("Organic_Shop_BackEnd.Model.AnonShoppingCartItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AnonShoppingCartId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AnonShoppingCartId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("AnonShoppingCartItems");
                 });
 
             modelBuilder.Entity("Organic_Shop_BackEnd.Model.ApiUser", b =>
@@ -497,25 +454,6 @@ namespace Organic_Shop_BackEnd.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Organic_Shop_BackEnd.Model.AnonShoppingCartItem", b =>
-                {
-                    b.HasOne("Organic_Shop_BackEnd.Model.AnonShoppingCart", "AnonShoppingCart")
-                        .WithMany("ShoppingCartItems")
-                        .HasForeignKey("AnonShoppingCartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Organic_Shop_BackEnd.Model.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AnonShoppingCart");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("Organic_Shop_BackEnd.Model.Order", b =>
                 {
                     b.HasOne("Organic_Shop_BackEnd.Model.ApiUser", "User")
@@ -585,11 +523,6 @@ namespace Organic_Shop_BackEnd.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("ShoppingCart");
-                });
-
-            modelBuilder.Entity("Organic_Shop_BackEnd.Model.AnonShoppingCart", b =>
-                {
-                    b.Navigation("ShoppingCartItems");
                 });
 
             modelBuilder.Entity("Organic_Shop_BackEnd.Model.Order", b =>
