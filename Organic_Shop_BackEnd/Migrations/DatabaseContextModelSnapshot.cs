@@ -185,7 +185,7 @@ namespace Organic_Shop_BackEnd.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AnonShoppingCarts");
+                    b.ToTable("AnonShoppingCarts", (string)null);
                 });
 
             modelBuilder.Entity("Organic_Shop_BackEnd.Model.AnonShoppingCartItem", b =>
@@ -211,7 +211,7 @@ namespace Organic_Shop_BackEnd.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("AnonShoppingCartItems");
+                    b.ToTable("AnonShoppingCartItems", (string)null);
                 });
 
             modelBuilder.Entity("Organic_Shop_BackEnd.Model.ApiUser", b =>
@@ -302,7 +302,7 @@ namespace Organic_Shop_BackEnd.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Organic_Shop_BackEnd.Model.Order", b =>
@@ -340,7 +340,7 @@ namespace Organic_Shop_BackEnd.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("Organic_Shop_BackEnd.Model.OrderItem", b =>
@@ -366,7 +366,7 @@ namespace Organic_Shop_BackEnd.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", (string)null);
                 });
 
             modelBuilder.Entity("Organic_Shop_BackEnd.Model.Product", b =>
@@ -395,7 +395,7 @@ namespace Organic_Shop_BackEnd.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Organic_Shop_BackEnd.Model.ShoppingCart", b =>
@@ -417,7 +417,7 @@ namespace Organic_Shop_BackEnd.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ShoppingCarts");
+                    b.ToTable("ShoppingCarts", (string)null);
                 });
 
             modelBuilder.Entity("Organic_Shop_BackEnd.Model.ShoppingCartItem", b =>
@@ -443,7 +443,7 @@ namespace Organic_Shop_BackEnd.Migrations
 
                     b.HasIndex("ShoppingCartId");
 
-                    b.ToTable("ShoppingCartItems");
+                    b.ToTable("ShoppingCartItems", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

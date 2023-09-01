@@ -9,6 +9,6 @@ namespace Organic_Shop_BackEnd.Model
 
         public string LocalCartId { get; set; }
 
-        public IList<AnonShoppingCartItem> ShoppingCartItems { get; set; }
+        public IList<AnonShoppingCartItem> AnonShoppingCartItems { get; set; }
     }
 }

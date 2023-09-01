@@ -39,12 +39,16 @@ namespace Organic_Shop_BackEnd.Controllers
                 .Where(sc => sc.User.Email == userName)
                 .FirstOrDefault();
 
-            if (cart is null) return NotFound();
+            if (cart is null)
+            {
+                var userId = GetValueFromToken(token, propertyName: "userId");
+                cart = CreateCartInDb(userId);
+            }
 
             return Ok(_mapper.Map<ShoppingCartDTO>(cart));
         }
 
-        
+ 
 
         //[Authorize]
         [HttpPost("AddProduct")]
