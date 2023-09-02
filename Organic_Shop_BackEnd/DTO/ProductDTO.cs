@@ -33,7 +33,7 @@ namespace Organic_Shop_BackEnd.DTO
         [Required]
         public string Title { get; set; }
         [Required]
-        public int Price { get; set; }
+        public double Price { get; set; }
         [Required]
         public string ImageUrl { get; set; }
         [Required]

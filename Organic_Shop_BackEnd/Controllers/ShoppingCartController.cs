@@ -81,6 +81,53 @@ namespace Organic_Shop_BackEnd.Controllers
             return Ok();
         }
 
+        [HttpPost("ReplaceAnonCartToUserCart")]
+        public IActionResult ReplaceAnonCartToUserCart(
+            [FromHeader(Name = "Authentication")] string token,
+            [FromHeader(Name = "localStorageCartId")] string localStorageCartId)
+        {
+            var anonShoppingCart = _context.AnonShoppingCarts
+                .Include(asc => asc.AnonShoppingCartItems)
+                .Where(asc => asc.LocalCartId == localStorageCartId)
+                .FirstOrDefault();
+
+            if (anonShoppingCart is null) return NotFound();
+
+            if (anonShoppingCart.AnonShoppingCartItems.Count == 0)
+            {
+                _context.Remove(anonShoppingCart);
+                return Ok();
+            }
+
+            var userId = GetValueFromToken(token, propertyName: "userId");
+
+            //var userCart = CreateCartInDb(userId);
+
+            var userCart = _context.ShoppingCarts
+                .Include(sc => sc.ShoppingCartItems)
+                .Where(sc => sc.UserId == userId)
+                .FirstOrDefault();
+
+            if (userCart is null)
+            {
+                userCart = CreateCartInDb(userId);
+                userCart.ShoppingCartItems = new List<ShoppingCartItem>();
+            }
+
+            userCart.ShoppingCartItems.Clear();
+
+            foreach (var anonCartItem in anonShoppingCart.AnonShoppingCartItems)
+                userCart.ShoppingCartItems.Add(new ShoppingCartItem
+                {
+                    Quantity = anonCartItem.Quantity,
+                    ProductId = anonCartItem.ProductId,
+                });
+
+            _context.Remove(anonShoppingCart);
+            _context.SaveChanges();
+            return Ok();
+        }
+
         //[Authorize]
         [HttpDelete("{productId:int}", Name = "RemoveProduct")]
         public IActionResult RemoveFromCart([FromHeader(Name = "Authentication")] string token, int productId)
@@ -122,7 +169,6 @@ namespace Organic_Shop_BackEnd.Controllers
             _context.SaveChanges();
             return Ok();
         }
-
 
         private string GetValueFromToken(string token, string propertyName)
         {
