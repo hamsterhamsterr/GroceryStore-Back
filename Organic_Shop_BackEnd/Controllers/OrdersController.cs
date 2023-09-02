@@ -59,6 +59,23 @@ namespace Organic_Shop_BackEnd.Controllers
             return Ok(ordersDTO);
         }
 
+        //[Authorize()]
+        [HttpGet("{orderId:int}")]
+        public IActionResult GetOrderByUser([FromHeader(Name = "Authentication")] string token, int orderId)
+        {
+            var userId = GetValueFromToken(token, propertyName: "userId");
+            var isAdmin = IsAdmin(token);
+
+            var order = _context.Orders
+                .Include(o => o.User)
+                .Include(o => o.OrderItems).ThenInclude(oi => oi.Product).ThenInclude(p => p.Category)
+                .Where(o => (isAdmin && o.Id == orderId) || (o.UserId == userId && o.Id == orderId)).FirstOrDefault();
+
+            if (order == null) return NotFound();
+
+            return Ok(_mapper.Map<GetOrderDTO>(order));
+        }
+
         //[Authorize]
         [HttpPost]
         public IActionResult PlaceOrder(
@@ -82,6 +99,13 @@ namespace Organic_Shop_BackEnd.Controllers
             var jwtSecurityToken = handler.ReadJwtToken(token);
             var tokenValue = jwtSecurityToken.Claims.First(claim => claim.Type == propertyName).Value;
             return tokenValue;
+        }
+
+        private bool IsAdmin(string token)
+        {
+            var role = GetValueFromToken(token, "role");
+            if (role == "Admin") return true;
+            return false;
         }
     }
 }
