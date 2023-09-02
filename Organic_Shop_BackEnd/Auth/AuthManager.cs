@@ -60,6 +60,8 @@ namespace Organic_Shop_BackEnd.Auth
         {
             var claims = new List<Claim>
             {
+                new Claim("firstName", _user.FirstName),
+                new Claim("lastName", _user.LastName),
                 new Claim("name", _user.UserName),
                 new Claim("userId", _user.Id)
             };
