@@ -15,6 +15,12 @@ namespace Organic_Shop_BackEnd.DTO
     public class RegisterUserDTO
     {
         [Required]
+        public string FirstName { get; set; }
+
+        [Required]
+        public string LastName { get; set; }
+
+        [Required]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 

@@ -41,6 +41,8 @@ namespace Organic_Shop_BackEnd.Controllers
             {
                 var user = _mapper.Map<ApiUser>(userDTO);
                 user.UserName = userDTO.Email;
+                user.FirstName = userDTO.FirstName;
+                user.LastName = userDTO.LastName;
                 var result = await _userManager.CreateAsync(user, userDTO.Password);
 
                 if (!result.Succeeded)
