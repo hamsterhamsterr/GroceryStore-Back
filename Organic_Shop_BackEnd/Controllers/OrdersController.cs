@@ -27,6 +27,8 @@ namespace Organic_Shop_BackEnd.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet("GetAllOrders")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult GetAllOrders([FromHeader(Name = "Authorization")] string authorization)
         {
             var orders = _context.Orders
@@ -43,6 +45,8 @@ namespace Organic_Shop_BackEnd.Controllers
 
         [Authorize(Roles = "Admin, User")]
         [HttpGet("GetOrdersByUser")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult GetOrdersByUser(
             [FromHeader(Name = "Authentication")] string token,
             [FromHeader(Name = "Authorization")] string authorization)
@@ -65,6 +69,9 @@ namespace Organic_Shop_BackEnd.Controllers
         // admin can access to any order
         [Authorize(Roles = "Admin, User")]
         [HttpGet("{orderId:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult GetOrderByUser(
             [FromHeader(Name = "Authentication")] string token,
             [FromHeader(Name = "Authorization")] string authorization,
@@ -85,6 +92,8 @@ namespace Organic_Shop_BackEnd.Controllers
 
         [Authorize(Roles = "Admin, User")]
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult PlaceOrder(
             [FromHeader(Name = "Authentication")] string token,
             [FromHeader(Name = "Authorization")] string authorization,

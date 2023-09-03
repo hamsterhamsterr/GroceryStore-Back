@@ -30,6 +30,9 @@ namespace Organic_Shop_BackEnd.Controllers
 
         [HttpPost]
         [Route("register")]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Register([FromBody] RegisterUserDTO userDTO)
         {
             _logger.LogInformation($"Registration Attempt for {userDTO.Email}");
@@ -60,6 +63,10 @@ namespace Organic_Shop_BackEnd.Controllers
 
         [HttpPost]
         [Route("login")]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Login([FromBody] LoginUserDTO userDTO)
         {
             _logger.LogInformation($"Login Attempt for {userDTO.Email}");

@@ -23,6 +23,7 @@ namespace Organic_Shop_BackEnd.Controllers
         }
 
         [HttpGet("GetCart")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetAnonCart([FromHeader] string localStorageCartId)
         {
             var cart = GetCart(localStorageCartId);
@@ -33,6 +34,8 @@ namespace Organic_Shop_BackEnd.Controllers
         }
 
         [HttpPost("AddProductToCart")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult AddToAnonCart(
             [FromHeader] string localStorageCartId,
             [FromBody] int productId)
@@ -62,6 +65,9 @@ namespace Organic_Shop_BackEnd.Controllers
         }
 
         [HttpDelete("{productId:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult RemoveFromAnonCart(
             [FromHeader] string localStorageCartId,
             int productId)
@@ -89,6 +95,8 @@ namespace Organic_Shop_BackEnd.Controllers
         }
 
         [HttpDelete("ClearCart")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult ClearAnonCart([FromHeader] string localStorageCartId)
         {
             var cart = _context.AnonShoppingCarts

@@ -26,6 +26,8 @@ namespace Organic_Shop_BackEnd.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetProducts()
         {
             try
@@ -43,6 +45,8 @@ namespace Organic_Shop_BackEnd.Controllers
         }
 
         [HttpGet("{id:int}", Name = "GetProduct")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetProduct(int id)
         {
             var product = _context.Products
@@ -60,6 +64,8 @@ namespace Organic_Shop_BackEnd.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult CreateProduct(
             [FromHeader(Name = "Authorization")] string authorization, 
             [FromBody] CreateProductDTO productDTO)
@@ -74,6 +80,8 @@ namespace Organic_Shop_BackEnd.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult UpdateProduct(
             [FromHeader(Name = "Authorization")] string authorization, 
             [FromBody] UpdateProductDTO productDTO)
@@ -87,6 +95,9 @@ namespace Organic_Shop_BackEnd.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult DeleteProduct([FromHeader(Name = "Authorization")] string authorization, int id)
         {
             var product = _context.Products

@@ -28,6 +28,8 @@ namespace Organic_Shop_BackEnd.Controllers
 
         [Authorize(Roles = "Admin, User")]
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult GetCart(
             [FromHeader(Name = "Authorization")] string authorization, 
             [FromHeader(Name = "Authentication")] string token)
@@ -54,6 +56,8 @@ namespace Organic_Shop_BackEnd.Controllers
 
         [Authorize(Roles = "Admin, User")]
         [HttpPost("AddProduct")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult AddToCart(
             [FromHeader(Name = "Authorization")] string authorization,
             [FromHeader(Name = "Authentication")] string token,
@@ -86,6 +90,8 @@ namespace Organic_Shop_BackEnd.Controllers
         }
 
         [HttpPost("ReplaceAnonCartToUserCart")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult ReplaceAnonCartToUserCart(
             [FromHeader(Name = "Authentication")] string token,
             [FromHeader(Name = "localStorageCartId")] string localStorageCartId)
@@ -134,6 +140,9 @@ namespace Organic_Shop_BackEnd.Controllers
 
         [Authorize(Roles = "Admin, User")]
         [HttpDelete("{productId:int}", Name = "RemoveProduct")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult RemoveFromCart(
             [FromHeader(Name = "Authorization")] string authorization,
             [FromHeader(Name = "Authentication")] string token, 
@@ -161,6 +170,9 @@ namespace Organic_Shop_BackEnd.Controllers
 
         [Authorize(Roles = "Admin, User")]
         [HttpDelete("ClearCart")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult ClearCart(
             [FromHeader(Name = "Authorization")] string authorization,
             [FromHeader(Name = "Authentication")] string token)

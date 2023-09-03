@@ -21,6 +21,7 @@ namespace Organic_Shop_BackEnd.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetCategories()
         {
             var categories = _context.Categories.ToList();
@@ -29,6 +30,8 @@ namespace Organic_Shop_BackEnd.Controllers
         }
 
         [HttpGet("{id:int}", Name = "GetCategory")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetCategory(int id)
         {
             var category = _context.Categories
@@ -43,6 +46,8 @@ namespace Organic_Shop_BackEnd.Controllers
         }
 
         [HttpGet("{nameIdentificator}", Name = "GetCategoryByNameIdentificator")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetCategoryByNameIdentificator(string nameIdentificator)
         {
             var category = _context.Categories
