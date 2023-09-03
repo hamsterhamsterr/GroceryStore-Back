@@ -25,9 +25,9 @@ namespace Organic_Shop_BackEnd.Controllers
             _logger = logger;
         }
 
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetAllOrders")]
-        public IActionResult GetAllOrders()
+        public IActionResult GetAllOrders([FromHeader(Name = "Authorization")] string authorization)
         {
             var orders = _context.Orders
                 .Include(o => o.User)
@@ -41,9 +41,11 @@ namespace Organic_Shop_BackEnd.Controllers
             return Ok(ordersDTO);
         }
 
-        //[Authorize()]
+        [Authorize(Roles = "Admin, User")]
         [HttpGet("GetOrdersByUser")]
-        public IActionResult GetOrdersByUser([FromHeader(Name = "Authentication")] string token)
+        public IActionResult GetOrdersByUser(
+            [FromHeader(Name = "Authentication")] string token,
+            [FromHeader(Name = "Authorization")] string authorization)
         {
             var userId = GetValueFromToken(token, propertyName: "userId");
             var orders = _context.Orders
@@ -59,9 +61,14 @@ namespace Organic_Shop_BackEnd.Controllers
             return Ok(ordersDTO);
         }
 
-        //[Authorize()]
+        // In GetOrderByUser action, user can only access order that belong to him,
+        // admin can access to any order
+        [Authorize(Roles = "Admin, User")]
         [HttpGet("{orderId:int}")]
-        public IActionResult GetOrderByUser([FromHeader(Name = "Authentication")] string token, int orderId)
+        public IActionResult GetOrderByUser(
+            [FromHeader(Name = "Authentication")] string token,
+            [FromHeader(Name = "Authorization")] string authorization,
+            int orderId)
         {
             var userId = GetValueFromToken(token, propertyName: "userId");
             var isAdmin = IsAdmin(token);
@@ -76,10 +83,11 @@ namespace Organic_Shop_BackEnd.Controllers
             return Ok(_mapper.Map<GetOrderDTO>(order));
         }
 
-        //[Authorize]
+        [Authorize(Roles = "Admin, User")]
         [HttpPost]
         public IActionResult PlaceOrder(
-            [FromHeader(Name = "Authentication")] string token, 
+            [FromHeader(Name = "Authentication")] string token,
+            [FromHeader(Name = "Authorization")] string authorization,
             [FromBody] CreateOrderDTO orderDTO)
         {
             var userId = GetValueFromToken(token, propertyName: "userId");

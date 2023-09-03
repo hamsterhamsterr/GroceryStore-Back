@@ -26,9 +26,11 @@ namespace Organic_Shop_BackEnd.Controllers
             _logger = logger;
         }
 
-        //[Authorize]
+        [Authorize(Roles = "Admin, User")]
         [HttpGet]
-        public IActionResult GetCart([FromHeader(Name = "Authentication")] string token)
+        public IActionResult GetCart(
+            [FromHeader(Name = "Authorization")] string authorization, 
+            [FromHeader(Name = "Authentication")] string token)
         {
             var userName = GetValueFromToken(token, propertyName: "name");
 
@@ -50,10 +52,12 @@ namespace Organic_Shop_BackEnd.Controllers
 
  
 
-        //[Authorize]
+        [Authorize(Roles = "Admin, User")]
         [HttpPost("AddProduct")]
-        public IActionResult AddToCart([FromHeader(Name = "Authentication")] string token,
-                                       [FromBody] int productId)
+        public IActionResult AddToCart(
+            [FromHeader(Name = "Authorization")] string authorization,
+            [FromHeader(Name = "Authentication")] string token,
+            [FromBody] int productId)
         {
             var userId = GetValueFromToken(token, propertyName: "userId");
             var cart = _context.ShoppingCarts
@@ -128,9 +132,12 @@ namespace Organic_Shop_BackEnd.Controllers
             return Ok();
         }
 
-        //[Authorize]
+        [Authorize(Roles = "Admin, User")]
         [HttpDelete("{productId:int}", Name = "RemoveProduct")]
-        public IActionResult RemoveFromCart([FromHeader(Name = "Authentication")] string token, int productId)
+        public IActionResult RemoveFromCart(
+            [FromHeader(Name = "Authorization")] string authorization,
+            [FromHeader(Name = "Authentication")] string token, 
+            int productId)
         {
             var userId = GetValueFromToken(token, propertyName: "userId");
             var cart = _context.ShoppingCarts.Include(sc => sc.User).Where(sc => sc.User.Id == userId).FirstOrDefault();
@@ -152,9 +159,11 @@ namespace Organic_Shop_BackEnd.Controllers
             return Ok();
         }
 
-        //[Authorize]
+        [Authorize(Roles = "Admin, User")]
         [HttpDelete("ClearCart")]
-        public IActionResult ClearCart([FromHeader(Name = "Authentication")] string token)
+        public IActionResult ClearCart(
+            [FromHeader(Name = "Authorization")] string authorization,
+            [FromHeader(Name = "Authentication")] string token)
         {
             var userId = GetValueFromToken(token, "userId");
             var cart = _context.ShoppingCarts

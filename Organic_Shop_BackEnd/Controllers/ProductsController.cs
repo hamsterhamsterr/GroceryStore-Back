@@ -58,9 +58,11 @@ namespace Organic_Shop_BackEnd.Controllers
             return Ok(result);
         }
 
-        //[Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
-        public IActionResult CreateProduct([FromBody] CreateProductDTO productDTO)
+        public IActionResult CreateProduct(
+            [FromHeader(Name = "Authorization")] string authorization, 
+            [FromBody] CreateProductDTO productDTO)
         {
             var product = _mapper.Map<Product>(productDTO);
 
@@ -70,9 +72,11 @@ namespace Organic_Shop_BackEnd.Controllers
             return Ok(createdProduct.Id);
         }
 
-        //[Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Admin")]
         [HttpPut()]
-        public IActionResult UpdateProduct([FromBody] UpdateProductDTO productDTO)
+        public IActionResult UpdateProduct(
+            [FromHeader(Name = "Authorization")] string authorization, 
+            [FromBody] UpdateProductDTO productDTO)
         {
             var product = _mapper.Map<Product>(productDTO);
 
@@ -81,9 +85,9 @@ namespace Organic_Shop_BackEnd.Controllers
             return Ok();
         }
 
-        //[Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}")]
-        public IActionResult DeleteProduct(int id)
+        public IActionResult DeleteProduct([FromHeader(Name = "Authorization")] string authorization, int id)
         {
             var product = _context.Products
                                 .Where(p => p.Id == id)
