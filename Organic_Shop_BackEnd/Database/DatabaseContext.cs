@@ -42,8 +42,11 @@ namespace Organic_Shop_BackEnd.Database
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        
+        
         {
-            optionsBuilder.UseNpgsql(configuration.GetConnectionString("WebApiDatabase"));
+            var connectionString = Environment.GetEnvironmentVariable("GROCERY-STORE-CONNECTION-STRING");
+            optionsBuilder.UseNpgsql(connectionString);
         }
 
         
