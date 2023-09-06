@@ -12,9 +12,9 @@ namespace Organic_Shop_BackEnd.Migrations
         {
             migrationBuilder.Sql(@"INSERT INTO public.""Products"" (""Title"", ""Price"", ""ImageUrl"", ""CategoryId"")
                 VALUES
-                ('Spinach', 2.5, 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Spinach_Plant_Nourishment_Meal_Fresh_Healthy_Bio.jpg', 16),
-                ('Freshly Baked Bread', 3, 'https://p1.pxfuel.com/preview/103/128/7/bread-even-baked-white-bread-baked.jpg', 12),
-                ('Avocado', 1.75, 'https://upload.wikimedia.org/wikipedia/commons/5/50/Avocado_open.jpg', 14)");
+                ('Spinach', 2.5, 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Spinach_Plant_Nourishment_Meal_Fresh_Healthy_Bio.jpg', 5),
+                ('Freshly Baked Bread', 3, 'https://p1.pxfuel.com/preview/103/128/7/bread-even-baked-white-bread-baked.jpg', 1),
+                ('Avocado', 1.75, 'https://upload.wikimedia.org/wikipedia/commons/5/50/Avocado_open.jpg', 5)");
         }
 
         /// <inheritdoc />

@@ -10,11 +10,11 @@ namespace Organic_Shop_BackEnd.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(@"UPDATE public.""Categories"" SET ""NameIdentificator"" = 'bread' WHERE ""Id"" = '12';
-                                    UPDATE public.""Categories"" SET ""NameIdentificator"" = 'dairy' WHERE ""Id"" = '13';
-                                    UPDATE public.""Categories"" SET ""NameIdentificator"" = 'fruits' WHERE ""Id"" = '14';
-                                    UPDATE public.""Categories"" SET ""NameIdentificator"" = 'seasonings' WHERE ""Id"" = '15';
-                                    UPDATE public.""Categories"" SET ""NameIdentificator"" = 'vegetables' WHERE ""Id"" = '16';");
+            migrationBuilder.Sql(@"UPDATE public.""Categories"" SET ""NameIdentificator"" = 'bread' WHERE ""Id"" = '1';
+                                    UPDATE public.""Categories"" SET ""NameIdentificator"" = 'dairy' WHERE ""Id"" = '2';
+                                    UPDATE public.""Categories"" SET ""NameIdentificator"" = 'fruits' WHERE ""Id"" = '3';
+                                    UPDATE public.""Categories"" SET ""NameIdentificator"" = 'seasonings' WHERE ""Id"" = '4';
+                                    UPDATE public.""Categories"" SET ""NameIdentificator"" = 'vegetables' WHERE ""Id"" = '5';");
         }
 
         /// <inheritdoc />
