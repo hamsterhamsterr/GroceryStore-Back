@@ -67,6 +67,17 @@ namespace Organic_Shop_BackEnd
 
             app.MapControllers();
 
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                var context = services.GetRequiredService<DatabaseContext>();
+                if (context.Database.GetPendingMigrations().Any())
+                {
+                    context.Database.Migrate();
+                }
+            }
+
             try
             {
                 Log.Information("Application Is Starting");
