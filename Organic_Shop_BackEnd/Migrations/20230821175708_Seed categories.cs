@@ -17,7 +17,7 @@ namespace Organic_Shop_BackEnd.Migrations
                 ('Bread'),
                 ('Dairy'),
                 ('Fruits'),
-                ('Seasonings and Spices'),
+                ('Seasonings'),
                 ('Vegetables')");
         }
 
