@@ -14,11 +14,11 @@ namespace Organic_Shop_BackEnd.Migrations
             migrationBuilder.Sql(@"
                 INSERT INTO public.""Categories"" (""Name"")
                 VALUES
-                ('Bread'),
-                ('Dairy'),
-                ('Fruits'),
-                ('Seasonings'),
-                ('Vegetables')");
+                ('Хлеб'),
+                ('Молочный продукты'),
+                ('Фрукты'),
+                ('Специи'),
+                ('Овощи')");
         }
 
         /// <inheritdoc />
